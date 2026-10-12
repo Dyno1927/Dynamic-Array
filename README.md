@@ -58,6 +58,7 @@ make clean && make CFLAGS="-fsanitize=address,undefined -g -O0 -Wall -Wextra -Ii
 
 ## Status
 
-Day 1 done: `vec_init`, `vec_push`, `vec_free` — working, ASan-clean,
-pushed to GitHub. Still to write: `vec_get` / `vec_set` / `vec_pop`
-(prototypes already waiting in `vec.h`).
+Done. The full API is implemented and ASan/UBSan-clean: `vec_init`,
+`vec_push`, `vec_get`, `vec_set`, `vec_pop`, `vec_free`. `main.c` drives
+every one of them. `vec_get`/`vec_set` are bounds-checked and `vec_pop`
+refuses an empty crate — both exit with a message instead of touching junk.
