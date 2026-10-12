@@ -30,10 +30,10 @@ void vec_init(Vec* vec);  // empty the crate: items=NULL, used=0, room=0
 void vec_push(Vec* vec,
               int value);  // append value, growing the chunk if it's full
 int vec_get(Vec* vec,
-            int index);                    // return items[index] (bounds-checked)
+            int index);  // return items[index] (bounds-checked)
 void vec_set(Vec* vec, int index,
-             int value);                   // overwrite items[index] (bounds-checked)
-int vec_pop(Vec* vec);                     // remove + return last item (errors if empty)
-void vec_free(Vec* vec);                       // give the heap chunk back to the OS
+             int value);  // overwrite items[index] (bounds-checked)
+int vec_pop(Vec* vec);    // remove + return last item (errors if empty)
+void vec_free(Vec* vec);  // give the heap chunk back to the OS
 
 #endif

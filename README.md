@@ -15,6 +15,11 @@ can. It starts with room for 4 and doubles whenever it fills up.
   is the kitchen (the implementation), `main.c` is the test harness
 - `#include "..."` vs `#include <...>`, header guards
 - a Makefile that builds the `.o` files and links them
+- bounds-checking the public ops: `vec_get` / `vec_set` validate the index
+  against `used`, `vec_pop` refuses an empty crate — a bad call exits with a
+  message instead of quietly reading or writing junk
+- `static` for `check_index`: file-private, shared by get and set, and
+  deliberately *not* in `vec.h`
 - why ASan exists: once it caught a heap-buffer-overflow I didn't even know
   I had, then caught a leak. Run the sanitizer build, learn the bug is real.
 
@@ -43,6 +48,17 @@ typedef struct {
 `room` vs `used`: capacity vs contents. Pushing only fills `used`; `room`
 only jumps when the bus is full.
 
+## API
+
+```c
+void vec_init(Vec* vec);                       // start empty: items=NULL, used=0, room=0
+void vec_push(Vec* vec, int value);            // append; doubles capacity when full
+int  vec_get(Vec* vec, int index);             // read items[index] (bounds-checked)
+void vec_set(Vec* vec, int index, int value);  // overwrite items[index] (bounds-checked)
+int  vec_pop(Vec* vec);                        // remove + return last (errors if empty)
+void vec_free(Vec* vec);                       // hand the heap chunk back
+```
+
 ## Build
 
 ```sh
@@ -58,7 +74,8 @@ make clean && make CFLAGS="-fsanitize=address,undefined -g -O0 -Wall -Wextra -Ii
 
 ## Status
 
-Done. The full API is implemented and ASan/UBSan-clean: `vec_init`,
+Done — I wrote the whole API and it's ASan/UBSan-clean: `vec_init`,
 `vec_push`, `vec_get`, `vec_set`, `vec_pop`, `vec_free`. `main.c` drives
-every one of them. `vec_get`/`vec_set` are bounds-checked and `vec_pop`
-refuses an empty crate — both exit with a message instead of touching junk.
+every one of them. I bounds-check `vec_get`/`vec_set` against `used` and
+make `vec_pop` refuse an empty crate, so a bad call exits with a message
+instead of touching junk.

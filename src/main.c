@@ -29,8 +29,7 @@ int main(void) {
 
     // Pop a couple off the end — last in, first out.
     printf("pop = %d, pop = %d\n", vec_pop(&numbers), vec_pop(&numbers));
-    printf("used after two pops: %d (room still %d)\n", numbers.used,
-           numbers.room);
+    printf("used after two pops: %d (room still %d)\n", numbers.used, numbers.room);
 
     vec_free(&numbers);  // give the heap chunk back so nothing leaks
 
