@@ -1,4 +1,4 @@
-CC      = gcc
+CC      = clang
 CFLAGS  = -Wall -Wextra -g -O0 -Iinclude
 SAN     = -fsanitize=address,undefined
 
